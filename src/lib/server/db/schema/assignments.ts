@@ -4,7 +4,7 @@ import { check, index, integer, sqliteTable, text, uniqueIndex } from 'drizzle-o
 import { personnel } from './personnel';
 import { shifts } from './shifts';
 import { stations } from './stations';
-import { assignmentTypes, type AssignmentType } from './types';
+import type { AssignmentType } from './types';
 
 export const personnelAssignments = sqliteTable(
 	'personnel_assignments',
@@ -63,16 +63,15 @@ export const personnelAssignments = sqliteTable(
 			'personnel_assignments_date_order',
 			sql`${table.endDate} is null or ${table.endDate} >= ${table.startDate}`
 		),
-
-		check(
-			'personnel_assignments_type_valid',
-			sql`${table.assignmentType} in (${sql.join(
-				assignmentTypes.map((type) => sql`${type}`),
-				sql`, `
-			)})`
-		)
-	]
-);
+        
+        // TODO: Generate these SQL literals from assignmentTypes without Drizzle
+        // converting them into bind parameters during migration generation.
+        check(
+	        'personnel_assignments_type_valid',
+	        sql`${table.assignmentType} in ('regular', 'temporary', 'administrative', 'training', 'unassigned')`
+        )
+            ]
+        );
 
 export type PersonnelAssignment = typeof personnelAssignments.$inferSelect;
 export type NewPersonnelAssignment = typeof personnelAssignments.$inferInsert;

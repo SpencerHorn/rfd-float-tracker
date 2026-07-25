@@ -1,7 +1,7 @@
 {
   "version": "6",
   "dialect": "sqlite",
-  "id": "e651d483-484e-4869-ba37-1d62fd07311f",
+  "id": "f95cd456-f9b9-490b-b4bd-31bc77d1fb67",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "personnel_assignments": {
@@ -178,7 +178,7 @@
         },
         "personnel_assignments_type_valid": {
           "name": "personnel_assignments_type_valid",
-          "value": "\"personnel_assignments\".\"assignment_type\" in (?, ?, ?, ?, ?)"
+          "value": "\"personnel_assignments\".\"assignment_type\" in ('regular', 'temporary', 'administrative', 'training', 'unassigned')"
         }
       }
     },
