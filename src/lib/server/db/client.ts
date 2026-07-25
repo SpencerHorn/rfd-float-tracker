@@ -1,24 +1,41 @@
-import { env } from '$env/dynamic/private';
-import Database from 'better-sqlite3';
-import { drizzle } from 'drizzle-orm/better-sqlite3';
-import { mkdirSync } from 'node:fs';
-import { dirname, resolve } from 'node:path';
+import { createDatabase, type DatabaseConnection } from './connection';
 
-import * as schema from './schema';
+const DEFAULT_DEVELOPMENT_DATABASE_PATH =
+	'./data/rfd-float-tracker.dev.db';
 
-const configuredPath = env.DATABASE_PATH || './data/rfd-float-tracker.db';
-const databasePath = resolve(configuredPath);
+const DEFAULT_PRODUCTION_DATABASE_PATH =
+	'./data/rfd-float-tracker.db';
 
-mkdirSync(dirname(databasePath), { recursive: true });
+function getDatabasePath(): string {
+	const configuredPath = process.env.DATABASE_PATH?.trim();
 
-const sqlite = new Database(databasePath);
+	if (configuredPath) {
+		return configuredPath;
+	}
 
-sqlite.pragma('journal_mode = WAL');
-sqlite.pragma('foreign_keys = ON');
-sqlite.pragma('busy_timeout = 5000');
+	return process.env.NODE_ENV === 'production'
+		? DEFAULT_PRODUCTION_DATABASE_PATH
+		: DEFAULT_DEVELOPMENT_DATABASE_PATH;
+}
 
-export const db = drizzle(sqlite, {
-	schema
-});
+/**
+ * During SvelteKit development, hot-module replacement can reload this module.
+ * Storing the connection on globalThis prevents unnecessary SQLite connections
+ * from being opened during those reloads.
+ */
+declare global {
+	// eslint-disable-next-line no-var
+	var __rfdDatabaseConnection: DatabaseConnection | undefined;
+}
 
-export { sqlite };
+const connection =
+	process.env.NODE_ENV === 'production'
+		? createDatabase(getDatabasePath())
+		: (globalThis.__rfdDatabaseConnection ??=
+				createDatabase(getDatabasePath()));
+
+export const db = connection.db;
+export const sqlite = connection.sqlite;
+export const databasePath = connection.databasePath;
+
+export default db;
