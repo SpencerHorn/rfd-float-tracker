@@ -28,10 +28,7 @@ export function createStationRepository(db: AppDatabase) {
 		/**
 		 * Returns stations for one department, ordered by station number.
 		 */
-		listByDepartment(
-			departmentId: number,
-			options: ListStationsOptions = {}
-		): Station[] {
+		listByDepartment(departmentId: number, options: ListStationsOptions = {}): Station[] {
 			if (options.includeInactive) {
 				return db
 					.select()
@@ -44,12 +41,7 @@ export function createStationRepository(db: AppDatabase) {
 			return db
 				.select()
 				.from(stations)
-				.where(
-					and(
-						eq(stations.departmentId, departmentId),
-						eq(stations.isActive, true)
-					)
-				)
+				.where(and(eq(stations.departmentId, departmentId), eq(stations.isActive, true)))
 				.orderBy(asc(stations.stationNumber))
 				.all();
 		},
@@ -58,28 +50,18 @@ export function createStationRepository(db: AppDatabase) {
 		 * Finds a station using its public UUID.
 		 */
 		findByPublicId(publicId: string): Station | undefined {
-			return db
-				.select()
-				.from(stations)
-				.where(eq(stations.publicId, publicId))
-				.get();
+			return db.select().from(stations).where(eq(stations.publicId, publicId)).get();
 		},
 
 		/**
 		 * Finds a station by its department and station number.
 		 */
-		findByDepartmentAndNumber(
-			departmentId: number,
-			stationNumber: number
-		): Station | undefined {
+		findByDepartmentAndNumber(departmentId: number, stationNumber: number): Station | undefined {
 			return db
 				.select()
 				.from(stations)
 				.where(
-					and(
-						eq(stations.departmentId, departmentId),
-						eq(stations.stationNumber, stationNumber)
-					)
+					and(eq(stations.departmentId, departmentId), eq(stations.stationNumber, stationNumber))
 				)
 				.get();
 		},
@@ -104,10 +86,7 @@ export function createStationRepository(db: AppDatabase) {
 		 *
 		 * Returns undefined when the public ID does not exist.
 		 */
-		update(
-			publicId: string,
-			input: UpdateStationInput
-		): Station | undefined {
+		update(publicId: string, input: UpdateStationInput): Station | undefined {
 			return db
 				.update(stations)
 				.set({
@@ -124,10 +103,7 @@ export function createStationRepository(db: AppDatabase) {
 		 *
 		 * Returns undefined when the public ID does not exist.
 		 */
-		setActive(
-			publicId: string,
-			isActive: boolean
-		): Station | undefined {
+		setActive(publicId: string, isActive: boolean): Station | undefined {
 			return db
 				.update(stations)
 				.set({
@@ -141,6 +117,4 @@ export function createStationRepository(db: AppDatabase) {
 	};
 }
 
-export type StationRepository = ReturnType<
-	typeof createStationRepository
->;
+export type StationRepository = ReturnType<typeof createStationRepository>;

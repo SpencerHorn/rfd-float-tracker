@@ -1,10 +1,8 @@
 import { createDatabase, type DatabaseConnection } from './connection';
 
-const DEFAULT_DEVELOPMENT_DATABASE_PATH =
-	'./data/rfd-float-tracker.dev.db';
+const DEFAULT_DEVELOPMENT_DATABASE_PATH = './data/rfd-float-tracker.dev.db';
 
-const DEFAULT_PRODUCTION_DATABASE_PATH =
-	'./data/rfd-float-tracker.db';
+const DEFAULT_PRODUCTION_DATABASE_PATH = './data/rfd-float-tracker.db';
 
 function getDatabasePath(): string {
 	const configuredPath = process.env.DATABASE_PATH?.trim();
@@ -31,8 +29,7 @@ declare global {
 const connection =
 	process.env.NODE_ENV === 'production'
 		? createDatabase(getDatabasePath())
-		: (globalThis.__rfdDatabaseConnection ??=
-				createDatabase(getDatabasePath()));
+		: (globalThis.__rfdDatabaseConnection ??= createDatabase(getDatabasePath()));
 
 export const db = connection.db;
 export const sqlite = connection.sqlite;
