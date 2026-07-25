@@ -1,740 +1,834 @@
 {
-	"version": "6",
-	"dialect": "sqlite",
-	"id": "e651d483-484e-4869-ba37-1d62fd07311f",
-	"prevId": "00000000-0000-0000-0000-000000000000",
-	"tables": {
-		"personnel_assignments": {
-			"name": "personnel_assignments",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "integer",
-					"primaryKey": true,
-					"notNull": true,
-					"autoincrement": true
-				},
-				"public_id": {
-					"name": "public_id",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"personnel_id": {
-					"name": "personnel_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"station_id": {
-					"name": "station_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"shift_id": {
-					"name": "shift_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"assignment_type": {
-					"name": "assignment_type",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "'regular'"
-				},
-				"position": {
-					"name": "position",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"start_date": {
-					"name": "start_date",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"end_date": {
-					"name": "end_date",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"is_primary": {
-					"name": "is_primary",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": true
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				},
-				"updated_at": {
-					"name": "updated_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				}
-			},
-			"indexes": {
-				"personnel_assignments_public_id_unique": {
-					"name": "personnel_assignments_public_id_unique",
-					"columns": ["public_id"],
-					"isUnique": true
-				},
-				"personnel_assignments_personnel_idx": {
-					"name": "personnel_assignments_personnel_idx",
-					"columns": ["personnel_id"],
-					"isUnique": false
-				},
-				"personnel_assignments_station_shift_idx": {
-					"name": "personnel_assignments_station_shift_idx",
-					"columns": ["station_id", "shift_id"],
-					"isUnique": false
-				},
-				"personnel_assignments_active_idx": {
-					"name": "personnel_assignments_active_idx",
-					"columns": ["personnel_id", "end_date"],
-					"isUnique": false
-				}
-			},
-			"foreignKeys": {
-				"personnel_assignments_personnel_id_personnel_id_fk": {
-					"name": "personnel_assignments_personnel_id_personnel_id_fk",
-					"tableFrom": "personnel_assignments",
-					"tableTo": "personnel",
-					"columnsFrom": ["personnel_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				},
-				"personnel_assignments_station_id_stations_id_fk": {
-					"name": "personnel_assignments_station_id_stations_id_fk",
-					"tableFrom": "personnel_assignments",
-					"tableTo": "stations",
-					"columnsFrom": ["station_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				},
-				"personnel_assignments_shift_id_shifts_id_fk": {
-					"name": "personnel_assignments_shift_id_shifts_id_fk",
-					"tableFrom": "personnel_assignments",
-					"tableTo": "shifts",
-					"columnsFrom": ["shift_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				}
-			},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {},
-			"checkConstraints": {
-				"personnel_assignments_date_order": {
-					"name": "personnel_assignments_date_order",
-					"value": "\"personnel_assignments\".\"end_date\" is null or \"personnel_assignments\".\"end_date\" >= \"personnel_assignments\".\"start_date\""
-				},
-				"personnel_assignments_type_valid": {
-					"name": "personnel_assignments_type_valid",
-					"value": "\"personnel_assignments\".\"assignment_type\" in (?, ?, ?, ?, ?)"
-				}
-			}
-		},
-		"departments": {
-			"name": "departments",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "integer",
-					"primaryKey": true,
-					"notNull": true,
-					"autoincrement": true
-				},
-				"public_id": {
-					"name": "public_id",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"name": {
-					"name": "name",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"abbreviation": {
-					"name": "abbreviation",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"is_active": {
-					"name": "is_active",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": true
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				},
-				"updated_at": {
-					"name": "updated_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				}
-			},
-			"indexes": {
-				"departments_public_id_unique": {
-					"name": "departments_public_id_unique",
-					"columns": ["public_id"],
-					"isUnique": true
-				},
-				"departments_name_unique": {
-					"name": "departments_name_unique",
-					"columns": ["name"],
-					"isUnique": true
-				},
-				"departments_abbreviation_unique": {
-					"name": "departments_abbreviation_unique",
-					"columns": ["abbreviation"],
-					"isUnique": true
-				}
-			},
-			"foreignKeys": {},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {},
-			"checkConstraints": {}
-		},
-		"float_events": {
-			"name": "float_events",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "integer",
-					"primaryKey": true,
-					"notNull": true,
-					"autoincrement": true
-				},
-				"public_id": {
-					"name": "public_id",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"personnel_id": {
-					"name": "personnel_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"shift_id": {
-					"name": "shift_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"source_station_id": {
-					"name": "source_station_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"destination_station_id": {
-					"name": "destination_station_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"float_date": {
-					"name": "float_date",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"reason": {
-					"name": "reason",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"notes": {
-					"name": "notes",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				},
-				"updated_at": {
-					"name": "updated_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				},
-				"voided_at": {
-					"name": "voided_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				}
-			},
-			"indexes": {
-				"float_events_public_id_unique": {
-					"name": "float_events_public_id_unique",
-					"columns": ["public_id"],
-					"isUnique": true
-				},
-				"float_events_personnel_date_idx": {
-					"name": "float_events_personnel_date_idx",
-					"columns": ["personnel_id", "float_date"],
-					"isUnique": false
-				},
-				"float_events_source_date_idx": {
-					"name": "float_events_source_date_idx",
-					"columns": ["source_station_id", "float_date"],
-					"isUnique": false
-				},
-				"float_events_destination_date_idx": {
-					"name": "float_events_destination_date_idx",
-					"columns": ["destination_station_id", "float_date"],
-					"isUnique": false
-				},
-				"float_events_shift_date_idx": {
-					"name": "float_events_shift_date_idx",
-					"columns": ["shift_id", "float_date"],
-					"isUnique": false
-				}
-			},
-			"foreignKeys": {
-				"float_events_personnel_id_personnel_id_fk": {
-					"name": "float_events_personnel_id_personnel_id_fk",
-					"tableFrom": "float_events",
-					"tableTo": "personnel",
-					"columnsFrom": ["personnel_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				},
-				"float_events_shift_id_shifts_id_fk": {
-					"name": "float_events_shift_id_shifts_id_fk",
-					"tableFrom": "float_events",
-					"tableTo": "shifts",
-					"columnsFrom": ["shift_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				},
-				"float_events_source_station_id_stations_id_fk": {
-					"name": "float_events_source_station_id_stations_id_fk",
-					"tableFrom": "float_events",
-					"tableTo": "stations",
-					"columnsFrom": ["source_station_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				},
-				"float_events_destination_station_id_stations_id_fk": {
-					"name": "float_events_destination_station_id_stations_id_fk",
-					"tableFrom": "float_events",
-					"tableTo": "stations",
-					"columnsFrom": ["destination_station_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				}
-			},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {},
-			"checkConstraints": {
-				"float_events_different_stations": {
-					"name": "float_events_different_stations",
-					"value": "\"float_events\".\"source_station_id\" <> \"float_events\".\"destination_station_id\""
-				}
-			}
-		},
-		"personnel": {
-			"name": "personnel",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "integer",
-					"primaryKey": true,
-					"notNull": true,
-					"autoincrement": true
-				},
-				"public_id": {
-					"name": "public_id",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"department_id": {
-					"name": "department_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"employee_number": {
-					"name": "employee_number",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"first_name": {
-					"name": "first_name",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"last_name": {
-					"name": "last_name",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"display_name": {
-					"name": "display_name",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"rank": {
-					"name": "rank",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"is_active": {
-					"name": "is_active",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": true
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				},
-				"updated_at": {
-					"name": "updated_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				}
-			},
-			"indexes": {
-				"personnel_public_id_unique": {
-					"name": "personnel_public_id_unique",
-					"columns": ["public_id"],
-					"isUnique": true
-				},
-				"personnel_department_employee_number_unique": {
-					"name": "personnel_department_employee_number_unique",
-					"columns": ["department_id", "employee_number"],
-					"isUnique": true
-				},
-				"personnel_department_idx": {
-					"name": "personnel_department_idx",
-					"columns": ["department_id"],
-					"isUnique": false
-				},
-				"personnel_name_idx": {
-					"name": "personnel_name_idx",
-					"columns": ["last_name", "first_name"],
-					"isUnique": false
-				}
-			},
-			"foreignKeys": {
-				"personnel_department_id_departments_id_fk": {
-					"name": "personnel_department_id_departments_id_fk",
-					"tableFrom": "personnel",
-					"tableTo": "departments",
-					"columnsFrom": ["department_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				}
-			},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {},
-			"checkConstraints": {}
-		},
-		"shifts": {
-			"name": "shifts",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "integer",
-					"primaryKey": true,
-					"notNull": true,
-					"autoincrement": true
-				},
-				"public_id": {
-					"name": "public_id",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"department_id": {
-					"name": "department_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"code": {
-					"name": "code",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"name": {
-					"name": "name",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"sort_order": {
-					"name": "sort_order",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": 0
-				},
-				"is_active": {
-					"name": "is_active",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": true
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				},
-				"updated_at": {
-					"name": "updated_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				}
-			},
-			"indexes": {
-				"shifts_public_id_unique": {
-					"name": "shifts_public_id_unique",
-					"columns": ["public_id"],
-					"isUnique": true
-				},
-				"shifts_department_code_unique": {
-					"name": "shifts_department_code_unique",
-					"columns": ["department_id", "code"],
-					"isUnique": true
-				},
-				"shifts_department_idx": {
-					"name": "shifts_department_idx",
-					"columns": ["department_id"],
-					"isUnique": false
-				}
-			},
-			"foreignKeys": {
-				"shifts_department_id_departments_id_fk": {
-					"name": "shifts_department_id_departments_id_fk",
-					"tableFrom": "shifts",
-					"tableTo": "departments",
-					"columnsFrom": ["department_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				}
-			},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {},
-			"checkConstraints": {}
-		},
-		"stations": {
-			"name": "stations",
-			"columns": {
-				"id": {
-					"name": "id",
-					"type": "integer",
-					"primaryKey": true,
-					"notNull": true,
-					"autoincrement": true
-				},
-				"public_id": {
-					"name": "public_id",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"department_id": {
-					"name": "department_id",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"station_number": {
-					"name": "station_number",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false
-				},
-				"name": {
-					"name": "name",
-					"type": "text",
-					"primaryKey": false,
-					"notNull": false,
-					"autoincrement": false
-				},
-				"is_active": {
-					"name": "is_active",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": true
-				},
-				"created_at": {
-					"name": "created_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				},
-				"updated_at": {
-					"name": "updated_at",
-					"type": "integer",
-					"primaryKey": false,
-					"notNull": true,
-					"autoincrement": false,
-					"default": "(unixepoch())"
-				}
-			},
-			"indexes": {
-				"stations_public_id_unique": {
-					"name": "stations_public_id_unique",
-					"columns": ["public_id"],
-					"isUnique": true
-				},
-				"stations_department_number_unique": {
-					"name": "stations_department_number_unique",
-					"columns": ["department_id", "station_number"],
-					"isUnique": true
-				},
-				"stations_department_idx": {
-					"name": "stations_department_idx",
-					"columns": ["department_id"],
-					"isUnique": false
-				}
-			},
-			"foreignKeys": {
-				"stations_department_id_departments_id_fk": {
-					"name": "stations_department_id_departments_id_fk",
-					"tableFrom": "stations",
-					"tableTo": "departments",
-					"columnsFrom": ["department_id"],
-					"columnsTo": ["id"],
-					"onDelete": "restrict",
-					"onUpdate": "cascade"
-				}
-			},
-			"compositePrimaryKeys": {},
-			"uniqueConstraints": {},
-			"checkConstraints": {
-				"stations_number_positive": {
-					"name": "stations_number_positive",
-					"value": "\"stations\".\"station_number\" > 0"
-				}
-			}
-		}
-	},
-	"views": {},
-	"enums": {},
-	"_meta": {
-		"schemas": {},
-		"tables": {},
-		"columns": {}
-	},
-	"internal": {
-		"indexes": {}
-	}
+  "version": "6",
+  "dialect": "sqlite",
+  "id": "f95cd456-f9b9-490b-b4bd-31bc77d1fb67",
+  "prevId": "00000000-0000-0000-0000-000000000000",
+  "tables": {
+    "personnel_assignments": {
+      "name": "personnel_assignments",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "public_id": {
+          "name": "public_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "personnel_id": {
+          "name": "personnel_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "station_id": {
+          "name": "station_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "shift_id": {
+          "name": "shift_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "assignment_type": {
+          "name": "assignment_type",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "'regular'"
+        },
+        "position": {
+          "name": "position",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "start_date": {
+          "name": "start_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "end_date": {
+          "name": "end_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_primary": {
+          "name": "is_primary",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        }
+      },
+      "indexes": {
+        "personnel_assignments_public_id_unique": {
+          "name": "personnel_assignments_public_id_unique",
+          "columns": [
+            "public_id"
+          ],
+          "isUnique": true
+        },
+        "personnel_assignments_personnel_idx": {
+          "name": "personnel_assignments_personnel_idx",
+          "columns": [
+            "personnel_id"
+          ],
+          "isUnique": false
+        },
+        "personnel_assignments_station_shift_idx": {
+          "name": "personnel_assignments_station_shift_idx",
+          "columns": [
+            "station_id",
+            "shift_id"
+          ],
+          "isUnique": false
+        },
+        "personnel_assignments_active_idx": {
+          "name": "personnel_assignments_active_idx",
+          "columns": [
+            "personnel_id",
+            "end_date"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "personnel_assignments_personnel_id_personnel_id_fk": {
+          "name": "personnel_assignments_personnel_id_personnel_id_fk",
+          "tableFrom": "personnel_assignments",
+          "tableTo": "personnel",
+          "columnsFrom": [
+            "personnel_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "personnel_assignments_station_id_stations_id_fk": {
+          "name": "personnel_assignments_station_id_stations_id_fk",
+          "tableFrom": "personnel_assignments",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "personnel_assignments_shift_id_shifts_id_fk": {
+          "name": "personnel_assignments_shift_id_shifts_id_fk",
+          "tableFrom": "personnel_assignments",
+          "tableTo": "shifts",
+          "columnsFrom": [
+            "shift_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "personnel_assignments_date_order": {
+          "name": "personnel_assignments_date_order",
+          "value": "\"personnel_assignments\".\"end_date\" is null or \"personnel_assignments\".\"end_date\" >= \"personnel_assignments\".\"start_date\""
+        },
+        "personnel_assignments_type_valid": {
+          "name": "personnel_assignments_type_valid",
+          "value": "\"personnel_assignments\".\"assignment_type\" in ('regular', 'temporary', 'administrative', 'training', 'unassigned')"
+        }
+      }
+    },
+    "departments": {
+      "name": "departments",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "public_id": {
+          "name": "public_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "abbreviation": {
+          "name": "abbreviation",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        }
+      },
+      "indexes": {
+        "departments_public_id_unique": {
+          "name": "departments_public_id_unique",
+          "columns": [
+            "public_id"
+          ],
+          "isUnique": true
+        },
+        "departments_name_unique": {
+          "name": "departments_name_unique",
+          "columns": [
+            "name"
+          ],
+          "isUnique": true
+        },
+        "departments_abbreviation_unique": {
+          "name": "departments_abbreviation_unique",
+          "columns": [
+            "abbreviation"
+          ],
+          "isUnique": true
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "float_events": {
+      "name": "float_events",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "public_id": {
+          "name": "public_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "personnel_id": {
+          "name": "personnel_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "shift_id": {
+          "name": "shift_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "source_station_id": {
+          "name": "source_station_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "destination_station_id": {
+          "name": "destination_station_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "float_date": {
+          "name": "float_date",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "reason": {
+          "name": "reason",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "notes": {
+          "name": "notes",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "voided_at": {
+          "name": "voided_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        }
+      },
+      "indexes": {
+        "float_events_public_id_unique": {
+          "name": "float_events_public_id_unique",
+          "columns": [
+            "public_id"
+          ],
+          "isUnique": true
+        },
+        "float_events_personnel_date_idx": {
+          "name": "float_events_personnel_date_idx",
+          "columns": [
+            "personnel_id",
+            "float_date"
+          ],
+          "isUnique": false
+        },
+        "float_events_source_date_idx": {
+          "name": "float_events_source_date_idx",
+          "columns": [
+            "source_station_id",
+            "float_date"
+          ],
+          "isUnique": false
+        },
+        "float_events_destination_date_idx": {
+          "name": "float_events_destination_date_idx",
+          "columns": [
+            "destination_station_id",
+            "float_date"
+          ],
+          "isUnique": false
+        },
+        "float_events_shift_date_idx": {
+          "name": "float_events_shift_date_idx",
+          "columns": [
+            "shift_id",
+            "float_date"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "float_events_personnel_id_personnel_id_fk": {
+          "name": "float_events_personnel_id_personnel_id_fk",
+          "tableFrom": "float_events",
+          "tableTo": "personnel",
+          "columnsFrom": [
+            "personnel_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "float_events_shift_id_shifts_id_fk": {
+          "name": "float_events_shift_id_shifts_id_fk",
+          "tableFrom": "float_events",
+          "tableTo": "shifts",
+          "columnsFrom": [
+            "shift_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "float_events_source_station_id_stations_id_fk": {
+          "name": "float_events_source_station_id_stations_id_fk",
+          "tableFrom": "float_events",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "source_station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        },
+        "float_events_destination_station_id_stations_id_fk": {
+          "name": "float_events_destination_station_id_stations_id_fk",
+          "tableFrom": "float_events",
+          "tableTo": "stations",
+          "columnsFrom": [
+            "destination_station_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "float_events_different_stations": {
+          "name": "float_events_different_stations",
+          "value": "\"float_events\".\"source_station_id\" <> \"float_events\".\"destination_station_id\""
+        }
+      }
+    },
+    "personnel": {
+      "name": "personnel",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "public_id": {
+          "name": "public_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "employee_number": {
+          "name": "employee_number",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "first_name": {
+          "name": "first_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "last_name": {
+          "name": "last_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "display_name": {
+          "name": "display_name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "rank": {
+          "name": "rank",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        }
+      },
+      "indexes": {
+        "personnel_public_id_unique": {
+          "name": "personnel_public_id_unique",
+          "columns": [
+            "public_id"
+          ],
+          "isUnique": true
+        },
+        "personnel_department_employee_number_unique": {
+          "name": "personnel_department_employee_number_unique",
+          "columns": [
+            "department_id",
+            "employee_number"
+          ],
+          "isUnique": true
+        },
+        "personnel_department_idx": {
+          "name": "personnel_department_idx",
+          "columns": [
+            "department_id"
+          ],
+          "isUnique": false
+        },
+        "personnel_name_idx": {
+          "name": "personnel_name_idx",
+          "columns": [
+            "last_name",
+            "first_name"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "personnel_department_id_departments_id_fk": {
+          "name": "personnel_department_id_departments_id_fk",
+          "tableFrom": "personnel",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "shifts": {
+      "name": "shifts",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "public_id": {
+          "name": "public_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "code": {
+          "name": "code",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "sort_order": {
+          "name": "sort_order",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": 0
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        }
+      },
+      "indexes": {
+        "shifts_public_id_unique": {
+          "name": "shifts_public_id_unique",
+          "columns": [
+            "public_id"
+          ],
+          "isUnique": true
+        },
+        "shifts_department_code_unique": {
+          "name": "shifts_department_code_unique",
+          "columns": [
+            "department_id",
+            "code"
+          ],
+          "isUnique": true
+        },
+        "shifts_department_idx": {
+          "name": "shifts_department_idx",
+          "columns": [
+            "department_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "shifts_department_id_departments_id_fk": {
+          "name": "shifts_department_id_departments_id_fk",
+          "tableFrom": "shifts",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {}
+    },
+    "stations": {
+      "name": "stations",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "integer",
+          "primaryKey": true,
+          "notNull": true,
+          "autoincrement": true
+        },
+        "public_id": {
+          "name": "public_id",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "department_id": {
+          "name": "department_id",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "station_number": {
+          "name": "station_number",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false
+        },
+        "name": {
+          "name": "name",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false,
+          "autoincrement": false
+        },
+        "is_active": {
+          "name": "is_active",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": true
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "integer",
+          "primaryKey": false,
+          "notNull": true,
+          "autoincrement": false,
+          "default": "(unixepoch())"
+        }
+      },
+      "indexes": {
+        "stations_public_id_unique": {
+          "name": "stations_public_id_unique",
+          "columns": [
+            "public_id"
+          ],
+          "isUnique": true
+        },
+        "stations_department_number_unique": {
+          "name": "stations_department_number_unique",
+          "columns": [
+            "department_id",
+            "station_number"
+          ],
+          "isUnique": true
+        },
+        "stations_department_idx": {
+          "name": "stations_department_idx",
+          "columns": [
+            "department_id"
+          ],
+          "isUnique": false
+        }
+      },
+      "foreignKeys": {
+        "stations_department_id_departments_id_fk": {
+          "name": "stations_department_id_departments_id_fk",
+          "tableFrom": "stations",
+          "tableTo": "departments",
+          "columnsFrom": [
+            "department_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
+          "onDelete": "restrict",
+          "onUpdate": "cascade"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "checkConstraints": {
+        "stations_number_positive": {
+          "name": "stations_number_positive",
+          "value": "\"stations\".\"station_number\" > 0"
+        }
+      }
+    }
+  },
+  "views": {},
+  "enums": {},
+  "_meta": {
+    "schemas": {},
+    "tables": {},
+    "columns": {}
+  },
+  "internal": {
+    "indexes": {}
+  }
 }
