@@ -133,7 +133,6 @@
 					<section class="station-card">
 						<div class="station-card__header">
 							<div>
-								<p class="station-number">Station {station.stationNumber}</p>
 								<h3>{station.name ?? 'Unnamed station'}</h3>
 							</div>
 							<button
@@ -440,17 +439,8 @@
 		margin-bottom: var(--space-4);
 	}
 
-	.station-number {
-		margin: 0;
-		font-size: 0.78rem;
-		font-weight: 700;
-		letter-spacing: 0.08em;
-		text-transform: uppercase;
-		color: var(--color-brand-600);
-	}
-
 	.station-card h3 {
-		margin: 0.2rem 0 0;
+		margin: 0;
 		font-size: 1.2rem;
 	}
 

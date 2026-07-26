@@ -79,14 +79,7 @@
 									scope="col"
 									class="px-6 py-3 text-left text-xs font-semibold tracking-wide text-slate-600 uppercase"
 								>
-									Station
-								</th>
-
-								<th
-									scope="col"
-									class="px-6 py-3 text-left text-xs font-semibold tracking-wide text-slate-600 uppercase"
-								>
-									Name
+									Station Name
 								</th>
 
 								<th
@@ -109,10 +102,6 @@
 							{#each data.stations as station (station.publicId)}
 								<tr>
 									<td class="px-6 py-4 text-sm font-semibold whitespace-nowrap text-slate-950">
-										Station {station.stationNumber}
-									</td>
-
-									<td class="px-6 py-4 text-sm text-slate-600">
 										{station.name ?? '—'}
 									</td>
 
