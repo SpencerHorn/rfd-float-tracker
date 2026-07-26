@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: rfd-float-tracker
+    env: node
+    plan: free
+    buildCommand: npm install && npm run build
+    startCommand: npm start
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DATABASE_PATH
+        value: /var/data/rfd-float-tracker.db
+    disk:
+      name: db
+      mountPath: /var/data
+      sizeGB: 1
