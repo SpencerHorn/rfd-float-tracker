@@ -6,6 +6,7 @@
 	"scripts": {
 		"db:generate": "drizzle-kit generate --config=drizzle.config.ts",
 		"db:migrate": "drizzle-kit migrate --config=drizzle.config.ts",
+		"db:migrate:prod": "node scripts/migrate-production.mjs",
 		"db:studio": "drizzle-kit studio --config=drizzle.config.ts",
 		"db:check": "drizzle-kit check --config=drizzle.config.ts",
 		"db:seed:dev": "tsx scripts/seed-development.ts",
@@ -13,6 +14,7 @@
 		"build": "vite build",
 		"preview": "vite preview",
 		"start": "node build/index.js",
+		"start:render": "npm run db:migrate:prod && npm start",
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
