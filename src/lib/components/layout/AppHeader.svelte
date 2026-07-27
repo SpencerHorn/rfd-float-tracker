@@ -1,11 +1,12 @@
 <script lang="ts">
 	import PageContainer from './PageContainer.svelte';
+	import rfdLogo from '$lib/assets/rfd-logo-transparent.png';
 </script>
 
 <header class="app-header">
 	<PageContainer>
 		<div class="header-content">
-			<div class="logo-placeholder" aria-label="RFD logo placeholder">RFD</div>
+			<img class="app-logo" src={rfdLogo} alt="Raleigh Fire Department logo" />
 
 			<div class="title-group">
 				<p class="eyebrow">Raleigh Fire Department</p>
@@ -30,16 +31,12 @@
 		padding-block: var(--space-3);
 	}
 
-	.logo-placeholder {
-		display: grid;
+	.app-logo {
 		flex: 0 0 auto;
-		width: 3rem;
-		height: 3rem;
-		place-items: center;
-		border: 2px dashed rgb(255 255 255 / 0.65);
-		border-radius: var(--radius-full);
-		font-size: 0.75rem;
-		font-weight: 800;
+		width: clamp(2.5rem, 10vw, 4rem);
+		height: auto;
+		max-height: 4rem;
+		object-fit: contain;
 	}
 
 	.title-group {
@@ -65,11 +62,6 @@
 	@media (min-width: 48rem) {
 		.header-content {
 			min-height: 5.25rem;
-		}
-
-		.logo-placeholder {
-			width: 3.5rem;
-			height: 3.5rem;
 		}
 
 		h1 {
